@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\Libs\Plugin1.4_dev.targets" />
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net45</TargetFramework>
 	<LangVersion>8.0</LangVersion>
   </PropertyGroup>
 

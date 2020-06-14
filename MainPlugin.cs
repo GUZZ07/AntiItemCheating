@@ -89,7 +89,7 @@ namespace AntiItemCheating
 						if (checker.Contains(item.type))
 						{
 							item.active = false;
-							NetMessage.SendData((int)PacketTypes.ItemOwner, -1, -1, null, item.whoAmI);
+							NetMessage.SendData((int)PacketTypes.UpdateItemDrop, -1, -1, null, item.whoAmI);
 							goto end;
 						}
 					}
@@ -188,7 +188,7 @@ namespace AntiItemCheating
 				checker.Add(ItemID.OrichalcumOre, ItemID.OrichalcumBar);
 				checker.Add(ItemID.AdamantiteOre, ItemID.AdamantiteBar);
 				checker.Add(ItemID.TitaniumOre, ItemID.TitaniumBar);
-				
+
 				checker.Add(ItemID.CobaltSword, ItemID.CobaltRepeater, ItemID.CobaltPickaxe, ItemID.CobaltDrill);
 				checker.Add(ItemID.PalladiumSword, ItemID.PalladiumRepeater, ItemID.PalladiumPickaxe, ItemID.PalladiumDrill);
 				checker.Add(ItemID.MythrilSword, ItemID.MythrilRepeater, ItemID.MythrilPickaxe, ItemID.MythrilDrill);
@@ -219,6 +219,21 @@ namespace AntiItemCheating
 				checker.Add(ItemID.ChainGuillotines);
 
 				checker.Add(ItemID.AnkhShield);
+				checker.Add(ItemID.DaedalusStormbow);
+				checker.Add(ItemID.DartPistol);
+				checker.Add(ItemID.DartRifle);
+
+				checker.Add(ItemID.FetidBaghnakhs);
+				checker.Add(ItemID.ChainGuillotines);
+
+				checker.Add(ItemID.VampireKnives);
+
+				checker.Add(ItemID.ChlorophyteOre);
+				checker.Add(ItemID.ChlorophyteBar);
+				checker.Add(ItemID.ChlorophyteJackhammer, ItemID.ChlorophyteWarhammer);
+				checker.Add(ItemID.ChlorophyteDrill, ItemID.ChlorophytePickaxe);
+				checker.Add(ItemID.ChlorophyteChainsaw, ItemID.ChlorophyteGreataxe);
+				checker.Add(ItemID.ChlorophyteBullet, ItemID.ChlorophyteArrow);
 
 				return checker;
 			}
@@ -250,6 +265,7 @@ namespace AntiItemCheating
 				checker.Add(ItemID.DeadlySphereStaff, ItemID.ToxicFlask);
 				checker.Add(ItemID.SpectreBar, ItemID.SpectreHood, ItemID.SpectreMask);
 				checker.Add(ItemID.ShroomiteBar, ItemID.ShroomiteBreastplate, ItemID.ShroomiteHelmet, ItemID.ShroomiteLeggings);
+				checker.Add(ItemID.MasterNinjaGear);
 				return checker;
 			}
 			#endregion
@@ -261,6 +277,7 @@ namespace AntiItemCheating
 				checker.Add(ItemID.SunStone, ItemID.CelestialStone, ItemID.CelestialShell);
 				checker.Add(ItemID.PossessedHatchet, ItemID.ShinyStone, ItemID.BeetleLeggings, ItemID.BeetleHusk, ItemID.BeetleHelmet);
 				checker.Add(ItemID.InfluxWaver, ItemID.LaserMachinegun, ItemID.AntiGravityHook);
+				checker.Add(ItemID.BetsyWings, ItemID.DD2BetsyBow, ItemID.BossBagBetsy, ItemID.DD2SquireBetsySword);
 				return checker;
 			}
 			#endregion
