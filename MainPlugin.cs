@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,14 +17,19 @@ namespace AntiItemCheating
 	{
 		private HookHandler<EventArgs> updateHandler;
 		private IList<IItemChecker> checkers;
+		private int[] itemWhiteList;
 		private IEnumerable<IItemChecker> validCheckers;
+
+		private Comparer<int> comparer = Comparer<int>.Default;
+
+		private const string whiteListPath = "tshock/ItemWhiteList.json";
 
 		public override string Name => "advanced item detector";
 		public override string Author => "TOFOUT";
 		public override string Description => "超进度物品检测";
 		public MainPlugin(Main game) : base(game)
 		{
-
+			
 		}
 
 		public override void Initialize()
@@ -30,6 +37,8 @@ namespace AntiItemCheating
 			updateHandler = OnUpdate;
 			ServerApi.Hooks.GameUpdate.Register(this, updateHandler);
 			GetDataHandlers.PlayerSlot += OnItemSlot;
+
+			LoadWhiteList();
 
 			checkers = new List<IItemChecker>
 			{
@@ -65,7 +74,7 @@ namespace AntiItemCheating
 			}
 			foreach (var checker in validCheckers)
 			{
-				if (checker.Contains(args.Type))
+				if (checker.Contains(args.Type) && !InWhiteList(args.Type))
 				{
 					LogDetected(args);
 					var reason = $"[i:{args.Type}]如果你是清白的,就请来解释一通";
@@ -74,6 +83,21 @@ namespace AntiItemCheating
 					args.Handled = true;
 					player.Disconnect(reason);
 				}
+			}
+		}
+
+		private void LoadWhiteList()
+		{
+			if(!File.Exists(whiteListPath))
+			{
+				itemWhiteList = new int[0];
+				File.WriteAllText(whiteListPath, "[]");
+			}
+			else
+			{
+				var text = File.ReadAllText(whiteListPath);
+				itemWhiteList = JsonConvert.DeserializeObject<int[]>(text);
+				Array.Sort(itemWhiteList, comparer);
 			}
 		}
 
@@ -86,7 +110,7 @@ namespace AntiItemCheating
 				{
 					foreach (var checker in validCheckers)
 					{
-						if (checker.Contains(item.type))
+						if (checker.Contains(item.type) && !InWhiteList(item.type))
 						{
 							item.active = false;
 							NetMessage.SendData((int)PacketTypes.UpdateItemDrop, -1, -1, null, item.whoAmI);
@@ -96,6 +120,11 @@ namespace AntiItemCheating
 				end:;
 				}
 			}
+		}
+
+		private bool InWhiteList(int type)
+		{
+			return Array.BinarySearch<int>(itemWhiteList, type, comparer) >= 0;
 		}
 
 		private void LogDetected(GetDataHandlers.PlayerSlotEventArgs args)
